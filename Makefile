@@ -1,47 +1,36 @@
-SRCS =
+SRCS	= ${wildcard *.c}
 OBJS	= ${SRCS:.c=.o}
-BONUSES =
-BOBJS	= ${BONUSES:.c=.o}
-INS	= libft.h
+LIBFT	= ${wildcard libft/*.c}
+LOBJS	= ${LIBFT:.c=.o}
+INCS	= ${wildcard *.h}
 NAME	= libftprintf.a
+CC	= gcc
+FLAGS	= -Wall -Werror -Wextra
+RM	= rm -f
 LIB	= ar rc
 RL	= ranlib
-CC		= gcc
-RM		= rm -f
-CFLAGS	= -Wall -Wextra -Werror
-
-.c.o:
-	${CC} ${CFLAGS} -c $< -o ${<:.c=.o} -I.${INS}
-
-${NAME}: ${OBJS}
-	${LIB} ${NAME} ${OBJS}
-	${RL} ${NAME}
 
 all: ${NAME}
 
-test: re ${TOBJS}
-	${CC} -g ${CFLAGS} ${TOBJS} -L. -lft -o ${TNAME}
+.c.o:
+	${CC} ${FLAGS} -c $< ${<:.c.o} -I.${INCS}
+
+${NAME}: runlibft ${OBJS}
+	${LIB} ${NAME} ${OBJS} ${LOBJS}
+	${RL} ${NAME}
+
+runlibft:
+	make -C libft bonus
 
 clean:
 	${RM} ${OBJS}
-	${RM} ${TOBJS}
-	${RM} ${BOBJS}
+	${MAKE} -C libft clean
 
 fclean: clean
 	${RM} ${NAME}
 	${RM} ${TNAME}
+	${MAKE} -C libft fclean
 
 re: fclean all
-
-test: re ${TOBJS}
-	${CC} -g ${CFLAGS} ${TOBJS} -L. -lft -o ${TNAME}
-
-bonus: re ${BOBJS}
-	${LIB} ${NAME} ${OBJS} ${BOBJS}
-	${RL} ${NAME}
-
-norm :
-	norminette -R CheckForbiddenSourceHeader *.c
-	norminette -R CheckDefine *.h
 
 .PHONY: all re clean fclean
