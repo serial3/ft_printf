@@ -1,5 +1,4 @@
-Possibly finished.
-Minor tweaks needed.
-Need to reevaluate
+Finished.
+Partially tested with main.c.
 
 ##### Made by Serial3.

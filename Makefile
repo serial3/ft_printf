@@ -1,13 +1,12 @@
 SRCS	= ${wildcard *.c}
 OBJS	= ${SRCS:.c=.o}
-LIBFT	= ${wildcard libft/*.c}
 LOBJS	= ${LIBFT:.c=.o}
 INCS	= ${wildcard *.h}
 NAME	= libftprintf.a
 CC	= gcc
 FLAGS	= -Wall -Werror -Wextra
 RM	= rm -f
-LIB	= ar rc
+LIB	= ar rcs
 RL	= ranlib
 
 all: ${NAME}
@@ -20,7 +19,7 @@ ${NAME}: runlibft ${OBJS}
 	${RL} ${NAME}
 
 runlibft:
-	make -C libft bonus
+	make -C libft
 
 clean:
 	${RM} ${OBJS}

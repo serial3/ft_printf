@@ -6,7 +6,7 @@
 /*   By: dromao-l <dromao-l@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 16:32:23 by dromao-l          #+#    #+#             */
-/*   Updated: 2021/12/25 18:41:16 by dromao-l         ###   ########.fr       */
+/*   Updated: 2021/12/28 19:35:23 by dromao-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_printf(const char *format, ...)
 	{
 		if (*ptr == '%')
 		{
-			len += flags_handle(args, ptr[i]);
+			len += flags_handle(args, ptr[1]);
 			ptr++;
 			i++;
 		}
