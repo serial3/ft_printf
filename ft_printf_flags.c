@@ -1,41 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf_flags.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dromao-l <dromao-l@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/15 16:32:23 by dromao-l          #+#    #+#             */
-/*   Updated: 2022/03/20 22:51:06 by dromao-l         ###   ########.fr       */
+/*   Created: 2021/12/25 17:10:52 by dromao-l          #+#    #+#             */
+/*   Updated: 2022/03/20 22:50:52 by dromao-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_printf(const char *format, ...)
+void	(*ft_getf(char c))
 {
-	va_list	args;
-	int		len;
-	int		i;
-
-	i = 0;
-	len = 0;
-	va_start(args, format);
-	while (format[i])
-	{
-		if (ft_strchr("%", format[i]))
-		{
-			i++;
-			if (format[i] != '\0' && ft_strchr("cspdiuxX", format[i]))
-			{
-				len += (((int (*)())ft_getf
-							(format[i++]))(va_arg(args, void *), 1));
-				continue ;
-			}
-		}
-		write(1, &format[i++], 1);
-		len++;
-	}
-	va_end(args);
-	return (len);
+	if (c == 'c')
+		return (&count_chars);
+	else if (c == 's')
+		return (&ft_putstrnullcheck_fd);
+	else if (c == 'd' || c == 'i')
+		return (&count_nbr);
+	else if (c == 'p')
+		return (&ft_putaddr_fd);
+	else if (c == 'u')
+		return (&count_unsigned);
+	else if (c == 'x')
+		return (&count_hexnum);
+	else if (c == 'X')
+		return (&count_hexnumupper);
+	return (NULL);
 }

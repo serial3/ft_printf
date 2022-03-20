@@ -1,5 +1,6 @@
 SRCS	= ${wildcard *.c}
 OBJS	= ${SRCS:.c=.o}
+LIBFT	= ${wildcard libft/*.c}
 LOBJS	= ${LIBFT:.c=.o}
 INCS	= ${wildcard *.h}
 NAME	= libftprintf.a

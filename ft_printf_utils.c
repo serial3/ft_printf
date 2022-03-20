@@ -3,72 +3,92 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dromao-l <dromao-l@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dromao-l <dromao-l@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 16:32:21 by dromao-l          #+#    #+#             */
-/*   Updated: 2021/12/25 18:41:19 by dromao-l         ###   ########.fr       */
+/*   Updated: 2022/03/20 22:51:01 by dromao-l         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_string(char *str)
+int	count_conversions(char *str)
 {
 	int	i;
+	int	result;
 
 	i = 0;
-	if (str == NULL)
-	{
-		ft_putstr_fd("(null)", 1);
-		return (6);
-	}
+	result = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
-		ft_putchar_fd(str[i], 1);
-		i++;
+		if (ft_strchr("%", str[i++]))
+			if (str[i])
+				if (ft_strchr("cspdiuxX", str[i++]))
+					result++;
 	}
-	return (i);
+	return (result);
 }
 
-int	print_number(int nbr)
+int	unsigned_num_counter(unsigned int nb, int base)
 {
-	int		len;
-	char	*str;
+	int	total;
 
-	len = 0;
-	str = ft_itoa(nbr);
-	len += print_string(str);
-	free(str);
-	return (len);
+	total = 0;
+	if (nb == 0)
+		return (1);
+	while (nb != 0)
+	{
+		nb /= base;
+		total++;
+	}
+	return (total);
 }
 
-int	print_unsigned(unsigned int nbr)
+void	ft_recursiveaddr(unsigned long int nb, int is_recursive)
 {
-	int	len;
+	char	*c;
+	char	res;
 
-	len = 0;
-	ft_putunsigned(nbr, 1, &len);
-	return (len);
-}
-
-int	print_hex(int nbr, int to_upper)
-{
-	int	len;
-
-	len = 0;
-	ft_puthex_fd((unsigned int)nbr, to_upper, 1, &len);
-	return (len);
-}
-
-int	print_pointer(unsigned long ptr)
-{
-	int	len;
-
-	len = 0;
-	len += print_string("0x");
-	if (ptr == 0)
-		len += ft_putchar_fd('0', 1);
+	if (!is_recursive)
+		write(1, "0x", 2);
+	if (nb >= 16)
+	{
+		ft_recursiveaddr(nb / 16, 1);
+		nb = nb % 16;
+	}
+	if (nb > 9)
+		res = 'a' + (nb - 10);
 	else
-		ft_put_ptr(ptr, &len);
-	return (len);
+		res = nb + '0';
+	c = &res;
+	write(1, c, 1);
+}
+
+void	ft_putunsignednbr_fd(unsigned int nb, int fd)
+{
+	if (nb < 10)
+	{
+		nb = nb + '0';
+		ft_putchar_fd(nb, fd);
+	}
+	else
+	{
+		ft_putunsignednbr_fd (nb / 10, fd);
+		nb = nb % 10 + '0';
+		ft_putchar_fd(nb, fd);
+	}
+}
+
+int	ft_putstrnullcheck_fd(char *str, int fd)
+{
+	if (str == NULL)
+	{
+		ft_putstr_fd("(null)", fd);
+		return (6);
+	}
+	else
+		ft_putstr_fd(str, fd);
+	return (ft_strlen(str));
 }
